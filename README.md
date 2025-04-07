@@ -7,8 +7,9 @@ Nstart aims to guide new users to [Nostr](https://njump.me) offering a easy and 
 - Create a multi-signer bunker URL for Nostr Connect (more info [below](#multi-signature-bunker))
 - Auto follow the contacts list of some old Nostr users
 - Customize of contact suggestions, useful for onboarding friends & family
+- Localized in many languages
 
-Check it now at https://start.njump.me  
+Check it now at https://start.njump.me
 Are you a dev? Discover the new [integration for apps](APPS-INTEGRATION.md)!
 
 https://github.com/user-attachments/assets/23dfe2a0-bdb8-4c70-83e0-912f67c41b0c
@@ -29,6 +30,14 @@ https://start.njump.me?s=npub10000003zmk89narqpczy4ff6rnuht2wu05na7kpnh3mak7z2tq
 ```
 
 You can pass more profiles, separated by commas.
+
+If you want to immediately show a localized version, append the lang code to the url, like this:
+
+```
+https://start.njump.me/it
+```
+
+You can also append the followers suggestion, as explained.
 
 ## Multi-signature bunker
 

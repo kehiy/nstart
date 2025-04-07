@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { t, currentLanguage } from '$lib/i18n';
 	import {
 		accent,
 		followerSuggestions,
@@ -34,7 +35,7 @@
 		// Set forced theme if specified
 		const forcedTheme = params.get('am');
 		if (forcedTheme === 'light' || forcedTheme === 'dark') {
-			console.log("forcedTheme =>", forcedTheme)
+			console.log('forcedTheme =>', forcedTheme);
 			$theme = forcedTheme;
 		}
 
@@ -138,40 +139,35 @@
 								style="animation-delay: 0.2s;"
 							>
 								<h1 class="font-bold">
-									<div class="text-[3rem] leading-[1em] sm:text-[5rem] text-black dark:text-white">WELCOME</div>
+									<div class="text-[3rem] leading-[1em] text-black dark:text-white sm:text-[5rem]">
+										{t('home.title1')}
+									</div>
 									<div
 										class="break-words text-[3.5rem] leading-[1em] sm:h-auto sm:text-[6rem]"
 										id="tw"
 									>
-										<span class="text-neutral-500 dark:text-neutral-400">TO</span>
-										<span class="text-accent">NOSTR</span>
+										<span class="text-neutral-500 dark:text-neutral-400">{t('home.title2')}</span>
+										<span class="text-accent">{t('home.title3')}</span>
 									</div>
 								</h1>
 							</div>
 
 							<!-- Intro text -->
 							<div
-								class="animate-fade1 text-[1.3rem] leading-7 text-neutral-700 dark:text-neutral-100 opacity-0"
+								class="animate-fade1 text-[1.3rem] leading-7 text-neutral-700 opacity-0 dark:text-neutral-100"
 								style="animation-delay: 0.5s;"
 							>
 								<p class="">
-									To join Nostr you need a profile, but it is not the usual one that a company
-									generates and manages for you. You create it yourself, no permissions are required.
+									{t('home.text1')}
 								</p>
 								<p class="mt-6">
-									Nostr is a different experience from the beginning: because there is no central
-									authority taking care of who is who, each user is identified by a cryptographic
-									keypair; don't worry about the tech slang, it is just a strong password that you
-									will have to keep safe.
+									{t('home.text2')}
 								</p>
 								<p class="mt-6">
 									{#if $callingAppName}
-										This wizard is used by <strong>{$callingAppName}</strong> to let you create your new
-										profile and safely manage it, in a few steps.
+										{@html t('home.text3a', $callingAppName)}
 									{:else}
-										This wizard is one of the many ways to bootstrap a Nostr profile that you can
-										later use in other apps. We help you to create your keypair and safely manage it
-										in a few steps. Are you ready?
+										{t('home.text3b')}
 									{/if}
 								</p>
 							</div>
@@ -183,37 +179,33 @@
 							>
 								<a
 									class="inline-flex items-center rounded bg-accent px-10 py-4 text-[1.8rem] text-white"
-									href="/yourself"
+									href="/{$currentLanguage}/yourself"
 								>
-									Let's Start <img
-										src="/icons/arrow-right.svg"
-										alt="Icon"
-										class="ml-4 mr-2 h-7 w-7"
-									/>
+									{t('home.continue_button')}
+									<img src="/icons/arrow-right.svg" alt="Icon" class="ml-4 mr-2 h-7 w-7" />
 								</a>
 							</div>
 
 							{#if !isModal}
 								<!-- Footer -->
 								<div
-									class="animate-fade1 leading-6 text-neutral-500 dark:text-neutral-300 opacity-0"
+									class="animate-fade1 leading-6 text-neutral-500 opacity-0 dark:text-neutral-300"
 									style="animation-delay: 1s;"
 								>
-									Would you like to know more about Nostr first?<br class="hidden sm:inline-block" />
-									<a href="https://njump.me" class="underline">Read a quick introduction</a>
+									{t('home.footer1')}<br class="hidden sm:inline-block" />
+									<a href="https://njump.me" class="underline">{t('home.footer2')}</a>
 								</div>
 							{/if}
 						</div>
 					</div>
 					<div
-						class="mt-10 animate-fade1 text-center text-sm text-neutral-400 dark:text-neutral-500 opacity-0 sm:mt-4"
+						class="mt-10 animate-fade1 text-center text-sm text-neutral-400 opacity-0 dark:text-neutral-500 sm:mt-4"
 						style="animation-delay: 1.2s;"
 					>
-						The source code for this service is <a
-							href="https://github.com/dtonon/nstart"
-							target="_blank"
-							class="underline">free and open</a
-						>
+						{@html t(
+							'home.footer3',
+							'href="https://github.com/dtonon/nstart" target="_blank" class="underline"'
+						)}
 					</div>
 					<!-- /content -->
 				</div>
