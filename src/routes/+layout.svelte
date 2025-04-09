@@ -88,7 +88,6 @@
 			// Initialize language based on URL structure or param
 			const queryString = window.location.search;
 			const currentLanguage = params.get('al');
-			console.log('currentLanguage', currentLanguage);
 			if (currentLanguage != null) {
 				console.log('Set lang with al param');
 				setLanguage(currentLanguage);

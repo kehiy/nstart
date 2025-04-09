@@ -3,6 +3,7 @@
 		"button_continue": "Continua",
 		"text_nowasm": "Spiacenti, il tuo browser non supporta WASM, quindi non puoi utilizzare questa funzionalità"
 	},
+
 	"home": {
 		"title1": "BENVENUTO",
 		"title2": "SU",
@@ -129,5 +130,10 @@
 		"button_back": "Torna a {$1}",
 		"text2": "{$1} è solo una delle oltre 80 applicazioni già disponibili per Nostr, <a>scoprile tutte</a>!",
 		"text3": "Questo è il tuo profilo web, puoi condividerlo ovunque e con chiunque:<br /><a {$1}>njump.me/{$2}</a>"
+	},
+
+	"confirmation_email": {
+		"subject": "Il tuo account Nostr",
+		"body": "Ciao!\n\nQuesta è la tua npub Nostr:\n${1}\n\nE questa è la tua chiave Nostr criptata::\n${2}\n\nRicordarti di salvare la password scelta in un luogo sicuro!\n\nBenvenuto su Nostr :)\n\nPS: Questo indirizzo email non accetta risposte, per richiedere supporto ti preghiamo di taggare https://njump.me/dtonon.com or https://njump.me/fiatjaf.com su Nostr"
 	}
 }

@@ -129,5 +129,10 @@
 		"button_back": "Go back to {$1}",
 		"text2": "{$1} is only one of the 80+ applications that have already been built on Nostr, <a>discover them all</a>!",
 		"text3": "This is your web profile, you can share it anywhere and with anyone:<br /><a {$1}>njump.me/{$2}</a>"
+	},
+
+	"confirmation_email": {
+		"subject": "Your Nostr account",
+		"body": "Hello!\n\nThis is your Nostr npub:\n{$1}\n\nAnd this is your encrypted Nostr key:\n{$2}\n\nRemember to save the chosen password in a safe place!\n\nWelcome to Nostr :)\n\nPS: This email address does not accept replies, to request support please tag https://njump.me/dtonon.com or https://njump.me/fiatjaf.com on Nostr"
 	}
 }

@@ -1,5 +1,6 @@
-// src/routes/api/send-email/+server.ts
+import { currentLanguage, setLanguage } from '$lib/i18n';
 import nodemailer from 'nodemailer';
+import { t } from '$lib/i18n';
 import { getPow } from '@nostr/tools/nip13';
 import { verifyEvent, type NostrEvent } from '@nostr/tools/pure';
 import {
@@ -37,25 +38,18 @@ export const POST = async ({ request }: { request: Request }) => {
 			}
 		});
 
+		let currentLang: string;
+		currentLanguage.subscribe((value) => {
+			currentLang = value;
+		});
+		await setLanguage(currentLang!);
+
 		// Set up email data
 		const mail_options = {
 			from: `"${SMTP_FROM_NAME}" <${VITE_SMTP_FROM_EMAIL}>`,
 			to: to,
-			subject: 'Your Nostr account',
-			text: `Hello!
-
-This is your Nostr npub:
-${npub}
-
-And this is your encrypted Nostr key:
-${ncryptsec}
-
-Remember to save the chosen password in a safe place!
-
-Welcome to Nostr :)
-
-PS: This email address does not accept replies, to request support please tag https://njump.me/dtonon.com or https://njump.me/fiatjaf.com on Nostr
-`
+			subject: t('confirmation_email.subject'),
+			text: t('confirmation_email.body', npub, ncryptsec)
 		};
 
 		// Send email
