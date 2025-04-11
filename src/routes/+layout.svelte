@@ -85,21 +85,30 @@
 			// Listen for theme updates from parent window
 			window.addEventListener('message', handleThemeUpdate);
 
-			// Initialize language based on URL structure or param
+			// Initialize language based on URL structure, passed param, browser lang
+			// Or fallback to the default (en)
 			const queryString = window.location.search;
-			const currentLanguage = params.get('al');
-			if (currentLanguage != null) {
-				console.log('Set lang with al param');
-				setLanguage(currentLanguage);
-				goto(`/${currentLanguage}/${queryString}`);
+			const paramLang = params.get('al');
+			const urlLang = $page.params.lang;
+			const browserLang = navigator.language.split('-')[0];
+			console.log('availableLanguages', availableLanguages);
+
+			if (urlLang && availableLanguages.find((l) => l.code === urlLang)) {
+				console.log('Set lang via URL structure', urlLang);
+				setLanguage(urlLang);
+			} else if (paramLang != null && availableLanguages.find((l) => l.code === paramLang)) {
+				console.log('Set lang with al param', paramLang);
+				setLanguage(paramLang);
+				goto(`/${paramLang}/${queryString}`);
+			} else if (browserLang && availableLanguages.find((l) => l.code === browserLang)) {
+				console.log('Using browser language match:', browserLang);
+				setLanguage(browserLang);
+				goto(`/${browserLang}/${queryString}`);
 			} else {
-				const lang = $page.params.lang;
-				if (lang && availableLanguages.find((l) => l.code === lang)) {
-					setLanguage(lang);
-				} else {
-					setLanguage(defaultLanguage.code);
-					goto(`/${defaultLanguage.code}/${queryString}`);
-				}
+				// Fall back to default language if no match
+				console.log('Falling back to default language:', defaultLanguage.code);
+				setLanguage(defaultLanguage.code);
+				goto(`/${defaultLanguage.code}/${queryString}`);
 			}
 		}
 	});
