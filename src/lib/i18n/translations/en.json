@@ -23,7 +23,7 @@
 		"side1": "On Nostr you decide to be whoever you want.",
 		"side2": "A Nostr profile usually includes a name, a picture and some additional information, but it's all optional.",
 		"side3": "The name is not a unique username, we can have as many Jacks we want! Feel free to use your real name or a nickname; you can always change it later.<br /> But remember: online privacy matters, don't share sensitive data.",
-		"side4": "And yes, to join Nostr you don't need to give your email address, phone number or anything like that, it is KYC free.",
+		"side4": "And yes, to join Nostr you don't need to give your email address, phone number or other identifying information.",
 		"label_image": "Your image",
 		"label_nickname": "Your (nick)name",
 		"label_about": "Something about you",
