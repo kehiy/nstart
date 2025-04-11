@@ -39,17 +39,15 @@
 
 		switch ($callingAppType) {
 			case 'modal':
-				if (browser && window.self !== window.top) {
-					window.parent.postMessage(
-						{
-							type: 'WIZARD_COMPLETE',
-							result: {
-								nostrLogin: loginToken
-							}
-						},
-						'*'
-					);
-				}
+				window.parent.postMessage(
+					{
+						type: 'WIZARD_COMPLETE',
+						result: {
+							nostrLogin: loginToken
+						}
+					},
+					'*'
+				);
 				break;
 			case 'web':
 			case 'popup':
@@ -61,6 +59,9 @@
 			case 'ios':
 				actionURL = `${$callingAppCode}://${loginToken}`;
 				break;
+			default:
+				alert('Error: Unsupported calling app type, check the baseURL config');
+				return;
 		}
 	});
 
