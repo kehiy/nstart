@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 	import {
 		accent,
 		followerSuggestions,
@@ -19,7 +20,6 @@
 
 	const isModal = getContext('isModal');
 
-	const baseUrl = import.meta.env.VITE_BASE_URL;
 
 	onMount(() => {
 		const params = new URLSearchParams(window.location.search);
@@ -106,7 +106,7 @@
 		property="og:description"
 		content="Create your Nostr account, back it up, and get a Nostr Connect bunker URL in few easy steps!"
 	/>
-	<meta property="og:image" content="{baseUrl}/images/relay.png" />
+	<meta property="og:image" content="{$page.url.origin}/images/relay.png" />
 </svelte:head>
 
 <div class="dark:bg-neutral-800">
