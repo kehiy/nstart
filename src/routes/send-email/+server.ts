@@ -2,15 +2,7 @@
 import nodemailer from 'nodemailer';
 import { getPow } from '@nostr/tools/nip13';
 import { verifyEvent, type NostrEvent } from '@nostr/tools/pure';
-import {
-	SMTP_HOST,
-	SMTP_PORT,
-	SMTP_SECURE,
-	SMTP_USER,
-	SMTP_PASS,
-	SMTP_FROM_NAME,
-	VITE_SMTP_FROM_EMAIL
-} from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 export const POST = async ({ request }: { request: Request }) => {
 	try {
@@ -27,19 +19,19 @@ export const POST = async ({ request }: { request: Request }) => {
 		const { to, ncryptsec, npub } = await request.json();
 
 		// Create a transporter object using the nodemailer library
-		const transporter = (nodemailer as any).createTransport({
-			host: SMTP_HOST!,
-			port: SMTP_PORT!,
-			secure: SMTP_SECURE === 'yes',
+		const transporter = nodemailer.createTransport({
+			host: env.SMTP_HOST,
+			port: Number(env.SMTP_PORT),
+			secure: env.SMTP_SECURE === 'yes',
 			auth: {
-				user: SMTP_USER!,
-				pass: SMTP_PASS!
+				user: env.SMTP_USER,
+				pass: env.SMTP_PASS
 			}
 		});
 
 		// Set up email data
 		const mail_options = {
-			from: `"${SMTP_FROM_NAME}" <${VITE_SMTP_FROM_EMAIL}>`,
+			from: `"${env.SMTP_FROM_NAME}" <${env.VITE_SMTP_FROM_EMAIL}>`,
 			to: to,
 			subject: 'Your Nostr account',
 			text: `Hello!
