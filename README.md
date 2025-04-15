@@ -1,6 +1,6 @@
 # Nstart
 
-Nstart aims to guide new users to [Nostr](https://njump.me) offering a easy and no-nonsense onboarding wizard, with useful hints about the protocol and some really exclusive features:
+Nstart aims to guide new users to [Nostr](https://njump.me) offering a easy, multi-language and no-nonsense onboarding wizard, with useful hints about the protocol and some really exclusive features:
 
 - Easy local backup of your nsec or ncryptsec
 - Email yourself your ncryptsec, as additional backup location
@@ -50,3 +50,8 @@ Discaimer: this bunker implementation needs a small update from the classic impl
 Nstart also offers an onboarding process to external Nostr clients, web and mobile! Taking advantage of this opportunity is really simple, [read more](APPS-INTEGRATION.md).
 
 https://github.com/user-attachments/assets/367a316d-34ab-42b9-b9c0-da7830e1dfa2
+
+## Contribute to translations
+
+Is your language not present? Help Nstart and contribute submitting the translation. You just need to create a new language file from https://github.com/dtonon/nstart/tree/multi-language/src/lib/i18n/translations and open a PR.
+Please submit the new translation only if you are a native speaker, and pay attention to respect the few tags (both html and '{X}') that are present in the text. Do not use any AI.
