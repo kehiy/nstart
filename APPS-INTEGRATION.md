@@ -87,6 +87,7 @@ To do that you have to import a JS from nstart.me and initialize a NstartModal o
 
         // Optional parameters
         aa: '689600' // Hex accent color
+        al: 'it', // Language (en, es, it, fr, de, ja)
         am: 'dark' // Force dark mode
         afb: true, // Force bunker (default False)
         asb: true, // Skip bunker (default False)
@@ -116,6 +117,14 @@ If you prefer, there is also a npm package available at https://www.npmjs.com/pa
 
 This is an alternative to the modal option, the use of which is suggested for usability reason only if the modal option cannot be applied.
 To use the popup instead of "web" use the `at=popup` param when opening it. Nstart will not open the `ac` url you provide, but instead will do `window.opener.location.href=ac + "#nostr-login=..."` to force `hashchange` event on your page. Make sure to specify a random `target` to `window.open` instead of `_blank` so that Nstart has access to `window.opener`, and then listen to `hashchange` event to accept the `#nostr-login=...` return value (and consume it as described above).
+
+## Language
+
+Nstart tries to infer the language from the browser, and eventually fallbacks to English, but you can explicitly set the language with the  `al` param and passing the color language code (en, es, it, fr, de, ja): For example:
+
+```
+http://nstart.me/?an=Coracle&al=ja
+```
 
 ## Dark mode
 
