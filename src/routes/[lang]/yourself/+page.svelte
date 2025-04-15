@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { t, currentLanguage } from '$lib/i18n';
 	import { finalizeEvent, type EventTemplate } from '@nostr/tools/pure';
 	import { calculateFileHash } from '@nostr/tools/nip96';
 	import { utf8Encoder } from '@nostr/tools/utils';
@@ -78,13 +79,13 @@
 			return data;
 		} else {
 			console.error('Upload failed:', response.statusText);
-			alert('Image upload failed. Please try again.');
+			alert(t('yourself.alert_failedupload'));
 		}
 	}
 
 	async function navigateContinue() {
 		if (!$name) {
-			alert('Please enter a name, bio and website are optional');
+			alert(t('yourself.alert_validation'));
 			return;
 		}
 
@@ -113,7 +114,7 @@
 		});
 		publishRelayList($sk, $pk);
 
-		goto('/download');
+		goto(`/${$currentLanguage}/download`);
 	}
 </script>
 
@@ -125,33 +126,29 @@
 					<div
 						class="text-[3rem] leading-[1em] text-neutral-500 dark:text-neutral-400 sm:text-[3rem]"
 					>
-						PRESENT
+						{t('yourself.title1')}
 					</div>
 					<div
 						class="break-words text-[3.5rem] leading-[1em] text-black dark:text-white sm:h-auto sm:text-[3.5rem]"
 						id="tw"
 					>
-						YOURSELF
+						{t('yourself.title2')}
 					</div>
 				</h1>
 			</div>
 
 			<div class="leading-5 text-neutral-700 dark:text-neutral-300 sm:w-[90%]">
-				<p class="">On Nostr you decide to be whoever you want.</p>
+				<p class="">{t('yourself.side1')}</p>
 				<p class="mt-6">
-					A Nostr profile usually includes a name, a picture and some additional information, but
-					it's all optional.
+					{t('yourself.side2')}
 				</p>
 
 				<p class="mt-6">
-					The name is not a unique username, we can have as many Jacks we want! Feel free to use
-					your real name or a nickname; you can always change it later.<br />
-					But remember: online privacy matters, don't share sensitive data.
+					{@html t('yourself.side3')}
 				</p>
 
 				<p class="mt-6">
-					And yes, to join Nostr you don't need to give your email address, phone number or anything
-					like that, it is KYC free.
+					{t('yourself.side4')}
 				</p>
 			</div>
 		</div>
@@ -160,7 +157,7 @@
 	<div slot="interactive">
 		<div class="mb-6 flex items-end justify-end">
 			<button on:click={triggerFileInput} class="text-xl text-neutral-400 dark:text-neutral-500"
-				>Your image</button
+				>{t('yourself.label_image')}</button
 			>
 			<div
 				class="-mr-8 ml-2 mt-2 h-1 w-20 border-t-2 border-neutral-300 dark:border-neutral-600"
@@ -193,17 +190,17 @@
 				{#if $name != ''}<label
 						for="name"
 						class="ml-4 text-xs uppercase text-neutral-700 dark:text-neutral-300"
-						>Your (nick)name</label
+						>{t('yourself.label_nickname')}</label
 					>{:else}<div></div>{/if}
 				<div class="mr-4 text-right text-xs uppercase text-neutral-500 dark:text-neutral-400">
-					required
+					{t('yourself.label_required')}
 				</div>
 			</div>
 			<!-- svelte-ignore a11y-autofocus -->
 			<input
 				id="name"
 				type="text"
-				placeholder="Your (nick)name"
+				placeholder={t('yourself.label_nickname')}
 				bind:value={$name}
 				autofocus={!isMobile}
 				class="input-hover-enabled mb-4 w-full rounded border-2 border-neutral-300 bg-white px-4 py-2 text-xl text-black focus:border-neutral-700 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:focus:border-neutral-400"
@@ -212,15 +209,15 @@
 				{#if $about != ''}<label
 						for="about"
 						class="ml-4 text-xs uppercase text-neutral-700 dark:text-neutral-300"
-						>Something about you</label
+						>{t('yourself.label_about')}</label
 					>{:else}<div></div>{/if}
 				<div class="mr-4 text-right text-xs uppercase text-neutral-400 dark:text-neutral-600">
-					optional
+					{t('yourself.label_optional')}
 				</div>
 			</div>
 			<textarea
 				id="about"
-				placeholder="Something about you"
+				placeholder={t('yourself.label_about')}
 				bind:value={$about}
 				class="input-hover-enabled mb-4 w-full rounded border-2 border-neutral-300 bg-white px-4 py-2 text-xl text-black focus:border-neutral-700 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:focus:border-neutral-400"
 			></textarea>
@@ -228,15 +225,15 @@
 				{#if $website != ''}<label
 						for="about"
 						class="ml-4 text-xs uppercase text-neutral-700 dark:text-neutral-300"
-						>Your website</label
+						>{t('yourself.label_website')}</label
 					>{:else}<div></div>{/if}
 				<div class="mr-4 text-right text-xs uppercase text-neutral-400 dark:text-neutral-600">
-					optional
+					{t('yourself.label_optional')}
 				</div>
 			</div>
 			<input
 				type="text"
-				placeholder="Your website"
+				placeholder={t('yourself.label_website')}
 				bind:value={$website}
 				class="input-hover-enabled w-full rounded border-2 border-neutral-300 bg-white px-4 py-2 text-xl text-black focus:border-neutral-700 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:focus:border-neutral-400"
 			/>
@@ -250,7 +247,7 @@
 			<ContinueButton
 				onClick={navigateContinue}
 				disabled={activationProgress > 0 || !$name}
-				text={activationProgress > 0 ? 'Uploading...' : 'Continue'}
+				text={activationProgress > 0 ? t('shared.button_uploading') : t('shared.button_continue')}
 			/>
 		</div>
 	</div>

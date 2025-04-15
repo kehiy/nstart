@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, afterUpdate } from 'svelte';
+	import { t, currentLanguage } from '$lib/i18n';
 	import { shardGetBunker } from '@fiatjaf/promenade-trusted-dealer';
 	import { pool } from '@nostr/gadgets/global';
 
@@ -60,12 +61,32 @@
 
 	// Function to increment threshold
 	function incrementThreshold() {
+		console.log('threshold', threshold);
+		console.log('selectedSigners.size', selectedSigners.size);
 		if (threshold >= selectedSigners.size) {
 			threshold = minThreshold;
 		} else {
 			threshold++;
 		}
 	}
+
+	// Reference to the container element
+	let thresholdButtonContainer: HTMLDivElement;
+
+	function updateEventListeners() {
+		if (!thresholdButtonContainer) return;
+
+		// Remove old event listeners first
+		const buttons = thresholdButtonContainer.querySelectorAll('button.threshold-button');
+		buttons.forEach((button) => {
+			button.removeEventListener('click', incrementThreshold);
+			// Re-add the event listener
+			button.addEventListener('click', incrementThreshold);
+		});
+	}
+
+	// Run after each update to ensure event listeners are current
+	afterUpdate(updateEventListeners);
 
 	onMount(() => {
 		document.documentElement.style.setProperty('--accent-color', '#' + $accent);
@@ -129,12 +150,12 @@
 	function navigateContinue() {
 		if ($skipFollow) {
 			if ($callingAppCode) {
-				goto('/back');
+				goto(`/${$currentLanguage}/back`);
 			} else {
-				goto('/finish');
+				goto(`/${$currentLanguage}/finish`);
 			}
 		} else {
-			goto('/follow');
+			goto(`/${$currentLanguage}/follow`);
 		}
 	}
 </script>
@@ -147,33 +168,30 @@
 					<div
 						class="text-[3rem] leading-[1em] text-neutral-500 dark:text-neutral-400 sm:text-[3rem]"
 					>
-						MULTI SIGNER
+						{t('bunker.title1')}
 					</div>
 					<div
 						class="break-words text-[3.5rem] leading-[1em] text-black dark:text-white sm:h-auto sm:text-[3.5rem]"
 						id="tw"
 					>
-						BUNKER
+						{t('bunker.title2')}
 					</div>
 				</h1>
 			</div>
 
 			<div class="leading-5 text-neutral-700 dark:text-neutral-300 sm:w-[90%]">
 				<p class="">
-					Now you have the possibility to split your <em class="italic">nsec</em> using a technique
-					called
-					<a href="https://www.youtube.com/watch?v=ReN0kMzDFro" target="_blank">FROST</a> and distribute
-					each shard to an independent trusted remote signer.
+					{@html t(
+						'bunker.side1',
+						'class="italic"',
+						'href="https://www.youtube.com/watch?v=ReN0kMzDFro" target="_blank" class="underline"'
+					)}
 				</p>
 				<p class="mt-6">
-					This will give you a <em class="italic">bunker</em> code that you can use to login in many
-					web, mobile and desktop apps without exposing your
-					<em class="italic">nsec</em>.
+					{@html t('bunker.side2', 'class="italic"', 'class="italic"')}
 				</p>
 				<p class="mt-6">
-					If you ever lose your <em class="italic">bunker</em> code, if the signers vanish from
-					Earth and it stops working or if it gets stolen by a malware virus you can use your
-					<em class="italic">nsec</em> to create a new and invalidate the old one.
+					{@html t('bunker.side3', 'class="italic"', 'class="italic"')}
 				</p>
 			</div>
 		</div>
@@ -188,30 +206,30 @@
 							bind:checked={activateBunker}
 							disabled={bunkerActivating || !isWasmSupported()}
 						>
-							I want to save my nsec, split in a pool of remote signers to be used for "bunker"
-							connections
+							{t('bunker.label_check1')}
 						</CheckboxWithLabel>
 					</div>
 				{/if}
 			</div>
 			{#if !isWasmSupported()}
 				<div class="mt-6 bg-amber-100 p-2 dark:bg-amber-900">
-					Sorry your browser doesn't support WASM, so you cannot use this feature
+					{t('shared.text_nowasm')}
 				</div>
 			{/if}
 			{#if activateBunker}
 				{#if !advanceSignersSelection}
 					<div class="mt-6">
-						The key will be split and shared with {advanceSignersSelection
-							? selectedSigners.size
-							: defaultSelected} independent signers, {threshold}
-						signers are required to sign an event.<br />
+						{@html t(
+							'bunker.text1',
+							`${advanceSignersSelection ? selectedSigners.size : defaultSelected}`,
+							`${threshold}`
+						)}
 					</div>
-					<div class="mt-4">The procedure could require some time, please hold on.</div>
+					<div class="mt-4">{t('bunker.text2')}</div>
 				{/if}
 				{#if advanceSignersSelection}
 					<hr class="mt-6 border-2" />
-					<div class="mt-2">Select the desidered signers:</div>
+					<div class="mt-2">{t('bunker.text3')}</div>
 					<div class="mt-4">
 						<div class="space-y-2">
 							{#each signers as signer}
@@ -225,22 +243,28 @@
 						</div>
 						<div class="mt-4">
 							{#if selectedSigners.size < minThreshold}
-								Select at least {3 - selectedSigners.size} more signer{selectedSigners.size === 2
-									? ''
-									: 's'}
+								{t(
+									'bunker.text4',
+									`${minThreshold - selectedSigners.size}`,
+									minThreshold - selectedSigners.size === 1
+										? `${t('bunker.text4b')}`
+										: `${t('bunker.text4c')}`
+								)}
 							{:else if selectedSigners.size == 2 && minThreshold == 2}
-								We'll use a 2-of-2 multi-signature schema using the selected signers
+								{t('bunker.text5')}
 							{:else}
-								We'll use a <button
-									class="cursor-pointer text-accent underline hover:no-underline"
-									on:click={incrementThreshold}>{threshold}</button
-								>-of-{selectedSigners.size} multi-signature schema using the selected signers
+								<div bind:this={thresholdButtonContainer}>
+									{@html t(
+										'bunker.text6',
+										`<button class=\"threshold-button cursor-pointer text-accent underline hover:no-underline\">${threshold}</button>`,
+										`${selectedSigners.size}`
+									)}
+								</div>
 							{/if}
 						</div>
 						{#if threshold == selectedSigners.size}
 							<div class="mt-2">
-								<strong>Warning</strong>, this scheme is risky, if one of the signers is offline,
-								the events will not be able to be signed.
+								{@html t('bunker.text7')}
 							</div>
 						{/if}
 					</div>
@@ -250,9 +274,7 @@
 					class="text-strongpink mt-4 text-left text-sm underline"
 					on:click={() => toggleAdvancedMode()}
 				>
-					{advanceSignersSelection
-						? 'I want to use the automatic signers selection'
-						: 'Advanced signers selection'}
+					{advanceSignersSelection ? t('bunker.switch2') : t('bunker.switch1')}
 				</button>
 			{/if}
 			{#if bunkerActivating || $bunkerURI !== ''}
@@ -267,8 +289,7 @@
 				<DoneIcon />
 			</div>
 			<div class="mt-10 text-neutral-600 dark:text-neutral-300">
-				All done! your bunker code is ready. Save it for later so that you can log into Nostr
-				clients without having to use your secret key:
+				{@html t('bunker.text8')}
 			</div>
 			<div class="mt-6 text-xl">
 				<div class="break-words">
@@ -279,11 +300,8 @@
 				on:click={downloadBunker}
 				class="mt-4 inline-flex w-full items-center justify-center rounded bg-accent px-8 py-3 text-[1.3rem] text-white"
 			>
-				Save my bunker <img
-					src="/icons/arrow-right.svg"
-					alt="continue"
-					class="ml-4 mr-2 h-5 w-5 rotate-90"
-				/>
+				{t('bunker.button_save')}
+				<img src="/icons/arrow-right.svg" alt="continue" class="ml-4 mr-2 h-5 w-5 rotate-90" />
 			</button>
 		{/if}
 
@@ -292,7 +310,7 @@
 				<ContinueButton
 					onClick={activate}
 					disabled={bunkerActivating}
-					text={bunkerActivating ? 'Activating...' : 'Activate the bunker'}
+					text={bunkerActivating ? t('bunker.button_activating') : t('bunker.button_activate')}
 				/>
 			</div>
 		{/if}
@@ -302,7 +320,7 @@
 				<ContinueButton
 					onClick={navigateContinue}
 					disabled={false}
-					text={$bunkerURI !== '' ? 'Continue' : 'No, thanks, continue'}
+					text={$bunkerURI !== '' ? t('shared.button_continue') : t('bunker.button_skip')}
 				/>
 			</div>
 		{/if}
