@@ -116,7 +116,7 @@
 			<p class="mt-6 sm:w-[80%]">
 				{@html t(
 					'finish.text4',
-					'href="https://njump.me/{$npub}" target="_blank" class="break-all underline"',
+					`href="https://njump.me/${$npub}" target="_blank" class="break-all underline"`,
 					$npub
 				)}
 			</p>
